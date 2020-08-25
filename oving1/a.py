@@ -1,19 +1,20 @@
 import torch
 import matplotlib.pyplot as plt
+import pandas as pd
+
+# Variables we tweak to find the lowest loss
+learning_rate = 0.0001
+epochs = 155000
 
 # Find weight based on length
 # Observed/training input and output
-lengths = []
-weights = []
-with open("length_weight.txt") as fp:
-    Lines = fp.readlines()
-    for line in Lines:
-        l1, l2 = line.strip().split(",")
-        lengths.append(float(l1))
-        weights.append(float(l2))
+data = pd.read_csv("length_weight.csv")
 
-x_train = torch.tensor(lengths).reshape(-1, 1)
-y_train = torch.tensor(weights).reshape(-1, 1)
+x_data = data["length"].tolist()
+y_data = data["weight"].tolist()
+
+x_train = torch.tensor(x_data, dtype=torch.float).reshape(-1, 1)
+y_train = torch.tensor(y_data, dtype=torch.float).reshape(-1, 1)
 
 
 class LinearRegressionModel:
@@ -35,8 +36,6 @@ class LinearRegressionModel:
 model = LinearRegressionModel()
 
 # Optimize: adjust W and b to minimize loss using stochastic gradient descent
-learning_rate = 0.0001
-epochs = 155000
 optimizer = torch.optim.SGD([model.b, model.W], learning_rate)
 for epoch in range(epochs):
     model.loss(x_train, y_train).backward()  # Compute loss gradients
@@ -48,9 +47,14 @@ print("W = %s, b = %s, loss = %s" % (model.W, model.b, model.loss(x_train, y_tra
 
 # Visualize result
 plt.plot(x_train, y_train, 'o', label='$(\\hat x^{(i)},\\hat y^{(i)})$')
+
+# Labels
 plt.xlabel('x')
 plt.ylabel('y')
+
+# Plot
 x = torch.tensor([[torch.min(x_train)], [torch.max(x_train)]])  # x = [[1], [6]]]
 plt.plot(x, model.f(x).detach(), label='$y = f(x) = xW+b$')
+
 plt.legend()
 plt.show()

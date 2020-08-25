@@ -1,19 +1,20 @@
 import torch
 import matplotlib.pyplot as plt
+import pandas as pd
+
+# Variables we tweak to find the lowest loss
+learning_rate = 1e-6
+epochs = 80000
 
 # Find circumference based on days
 # Observed/training input and output
-days = []
-circumference = []
-with open("day_head_circumference.txt") as fp:
-    Lines = fp.readlines()
-    for line in Lines:
-        l1, l2 = line.strip().split(",")
-        days.append(float(l1))
-        circumference.append(float(l2))
+data = pd.read_csv("day_head_circumference.csv")
 
-x_train = torch.tensor(days).reshape(-1, 1)
-y_train = torch.tensor(circumference).reshape(-1, 1)
+x_data = data["day"].tolist()
+y_data = data["head circumference"].tolist()
+
+x_train = torch.tensor(x_data, dtype=torch.float).reshape(-1, 1)
+y_train = torch.tensor(y_data, dtype=torch.float).reshape(-1, 1)
 
 
 class LinearRegressionModel:
@@ -24,7 +25,7 @@ class LinearRegressionModel:
 
     # Predictor
     def f(self, x):
-        # f (x) = 20σ(xW + b) + 31
+        # f(x) = 20σ(xW + b) + 31
         return 20 * torch.sigmoid(x @ self.W + self.b) + 31
 
     # Loss function
@@ -35,8 +36,6 @@ class LinearRegressionModel:
 model = LinearRegressionModel()
 
 # Optimize: adjust W and b to minimize loss using stochastic gradient descent
-learning_rate = 1e-6
-epochs = 50000
 optimizer = torch.optim.SGD([model.b, model.W], learning_rate)
 for epoch in range(epochs):
     model.loss(x_train, y_train).backward()  # Compute loss gradients
@@ -48,9 +47,14 @@ print("W = %s, b = %s, loss = %s" % (model.W, model.b, model.loss(x_train, y_tra
 
 # Visualize result
 plt.plot(x_train, y_train, 'o', label='$(\\hat x^{(i)},\\hat y^{(i)})$')
+
+# Labels
 plt.xlabel('x')
 plt.ylabel('y')
-x = torch.tensor([[torch.min(x_train)], [torch.max(x_train)]])  # x = [[1], [6]]]
-plt.plot(x, model.f(x).detach(), label='$y = f(x) = 20σ(xW + b) + 31')
+
+# Have to sort x_train to plot correctly
+x, indices = torch.sort(x_train, 0)
+plt.plot(x, model.f(x).detach(), label='$y = f(x) = 20*σ(xW+b)+31$', c="red")
+
 plt.legend()
 plt.show()
