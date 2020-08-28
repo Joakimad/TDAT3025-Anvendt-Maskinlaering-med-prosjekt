@@ -29,7 +29,7 @@ class LinearRegressionModel:
 
     # Uses Mean Squared Error
     def loss(self, x, y):
-        return torch.mean(torch.square(self.f(x) - y))
+        return torch.nn.functional.mse_loss(self.f(x), y)
 
 
 model = LinearRegressionModel()
