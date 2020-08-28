@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Variables we tweak to find the lowest loss
-learning_rate = 1e-5
+learning_rate = 1e-4
 epochs = 80000
 
 # Find age in days based on length and weight.
@@ -14,7 +14,7 @@ x_data = [data["length"].tolist(), data["weight"].tolist()]
 y_data = data["day"].tolist()
 
 x_train = torch.tensor(x_data, dtype=torch.float).t()
-y_train = torch.tensor(y_data, dtype=torch.float).t().reshape(-1, 1)
+y_train = torch.tensor(y_data, dtype=torch.float).reshape(-1, 1)
 
 
 class LinearRegressionModel:
