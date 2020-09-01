@@ -11,6 +11,7 @@ epochs = 80000
 data = pd.read_csv("day_length_weight.csv")
 
 x_data = [data["length"].tolist(), data["weight"].tolist()]
+print(x_data)
 y_data = data["day"].tolist()
 
 x_train = torch.tensor(x_data, dtype=torch.float).t()
