@@ -7,8 +7,8 @@ learning_rate = 0.1
 epochs = 10000
 
 # Observed/training input and output
-x_train = torch.tensor([[0.0], [1.0]])
-y_train = torch.tensor([[1.0], [0.0]])
+x_train = torch.tensor([[0.], [1.]])
+y_train = torch.tensor([[1.], [0.]])
 
 
 class SigmoidModel:
