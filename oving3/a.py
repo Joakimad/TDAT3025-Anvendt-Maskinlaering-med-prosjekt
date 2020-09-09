@@ -40,6 +40,11 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
                                     nn.Flatten(),
                                     nn.Linear(32 * 14 * 14, 10))
 
+        #self.logits = nn.Sequential(nn.Conv2d(1, 32, kernel_size=5, padding=2),
+        #                            nn.MaxPool2d(kernel_size=2),
+        #                            nn.Flatten(),
+        #                            nn.Linear(32 * 14 * 14, 10))
+
     # Predictor
     def f(self, x):
         return torch.softmax(self.logits(x), dim=1)
@@ -63,4 +68,4 @@ for epoch in range(epochs):
         optimizer.step()  # Perform optimization by adjusting W and b,
         optimizer.zero_grad()  # Clear gradients for next step
 
-    print("accuracy = %s" % model.accuracy(x_test, y_test))
+    print("%s: accuracy = %s" % batch, model.accuracy(x_test, y_test))
