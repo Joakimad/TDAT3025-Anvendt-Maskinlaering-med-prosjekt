@@ -1,21 +1,21 @@
-#Oppgave 2
+# Oppgave 2
 
-##a
+## a
 Lag en modell som predikerer tilsvarende NOT-operatoren.
 Visualiser resultatet etter optimalisering av modellen.
 
-##b 
+## b 
 Lag en modell som predikerer tilsvarende NAND-operatoren.
 Visualiser resultatet etter optimalisering av modellen.
 
-##c 
+## c 
 Lag en modell som predikerer tilsvarende XOR-operatoren. Før
 du optimaliserer denne modellen må du initialisere
 modellvariablene med tilfeldige tall for eksempel mellom -1 og 1. 
 Visualiser både når optimaliseringen konvergerer og ikke
 konvergerer mot en riktig modell.
 
-##d
+## d
 Lag en modell med prediktoren f (x) = softmax(xW + b) som
 klassifiserer handskrevne tall. Se mnist for eksempel lasting av
 MNIST datasettet, og visning og lagring av en observasjon. Du

@@ -8,8 +8,7 @@ learning_rate = 0.001
 
 # Load observations from the mnist dataset. The observations are divided into a training set and a test set
 mnist_train = torchvision.datasets.MNIST('./data', train=True, download=True)
-x_train = mnist_train.data.reshape(-1, 1, 28,
-                                   28).float()  # torch.functional.nn.conv2d argument must include channels (1)
+x_train = mnist_train.data.reshape(-1, 1, 28, 28).float()  # torch.functional.nn.conv2d argument must include channel(1)
 y_train = torch.zeros((mnist_train.targets.shape[0], 10))  # Create output tensor
 y_train[torch.arange(mnist_train.targets.shape[0]), mnist_train.targets] = 1  # Populate output
 
@@ -35,12 +34,32 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         super(ConvolutionalNeuralNetworkModel, self).__init__()
 
         # Model layers (includes initialized model variables):
-        self.logits = nn.Sequential(nn.Conv2d(1, 32, kernel_size=5, padding=2),
-                                    nn.MaxPool2d(kernel_size=2),
-                                    nn.Flatten(),
-                                    nn.Linear(32 * 14 * 14, 10))
 
-        #self.logits = nn.Sequential(nn.Conv2d(1, 32, kernel_size=5, padding=2),
+        # Original
+        # self.logits = nn.Sequential(
+        #      nn.Conv2d(1, 32, kernel_size=5, padding=2),
+        #      nn.MaxPool2d(kernel_size=2),
+        #      nn.Flatten(),
+        #      nn.Linear(32 * 14 * 14, 10))
+
+        # a
+        # Adding 2nd convulation layer
+        self.logits = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=5, padding=2),
+            nn.MaxPool2d(kernel_size=2),
+            nn.Conv2d(32, 64, kernel_size=5, padding=2),
+            nn.MaxPool2d(kernel_size=2),
+            nn.Flatten(),
+            nn.Linear(32 * 14 * 14, 10))
+
+        # b
+        # self.logits = nn.Sequential(nn.Conv2d(1, 32, kernel_size=5, padding=2),
+        #                            nn.MaxPool2d(kernel_size=2),
+        #                            nn.Flatten(),
+        #                            nn.Linear(32 * 14 * 14, 10))
+
+        # c
+        # self.logits = nn.Sequential(nn.Conv2d(1, 32, kernel_size=5, padding=2),
         #                            nn.MaxPool2d(kernel_size=2),
         #                            nn.Flatten(),
         #                            nn.Linear(32 * 14 * 14, 10))
@@ -68,4 +87,4 @@ for epoch in range(epochs):
         optimizer.step()  # Perform optimization by adjusting W and b,
         optimizer.zero_grad()  # Clear gradients for next step
 
-    print("%s: accuracy = %s" % batch, model.accuracy(x_test, y_test))
+    print("%s: accuracy = %s" % (batch, model.accuracy(x_test, y_test)))
