@@ -1,16 +1,22 @@
-a) Lag en modell som predikerer tilsvarende NOT-operatoren.
+#Oppgave 2
+
+##a
+Lag en modell som predikerer tilsvarende NOT-operatoren.
 Visualiser resultatet etter optimalisering av modellen.
 
-b) Lag en modell som predikerer tilsvarende NAND-operatoren.
+##b 
+Lag en modell som predikerer tilsvarende NAND-operatoren.
 Visualiser resultatet etter optimalisering av modellen.
 
-c) Lag en modell som predikerer tilsvarende XOR-operatoren. Før
+##c 
+Lag en modell som predikerer tilsvarende XOR-operatoren. Før
 du optimaliserer denne modellen må du initialisere
 modellvariablene med tilfeldige tall for eksempel mellom -1 og 1. 
 Visualiser både når optimaliseringen konvergerer og ikke
 konvergerer mot en riktig modell.
 
-d) Lag en modell med prediktoren f (x) = softmax(xW + b) som
+##d
+Lag en modell med prediktoren f (x) = softmax(xW + b) som
 klassifiserer handskrevne tall. Se mnist for eksempel lasting av
 MNIST datasettet, og visning og lagring av en observasjon. Du
 skal oppnå en nøyaktighet på 0.9 eller over. Lag 10 .png bilder
