@@ -56,34 +56,34 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         #     nn.Linear(64 * 7 * 7, 10))
 
         # B - With Extra Linear Layer
-        # self.logits = nn.Sequential(
-        #     # First Layer
-        #     nn.Conv2d(1, 32, kernel_size=5, padding=2),
-        #     nn.MaxPool2d(kernel_size=2),
-        #
-        #     # Second Layer
-        #     nn.Conv2d(32, 64, kernel_size=5, padding=2),
-        #     nn.MaxPool2d(kernel_size=2),
-        #
-        #     nn.Flatten(),
-        #     nn.Linear(64 * 7 * 7, 1024),
-        #     nn.Linear(1024, 10))
-
-        # C - With Optimization
         self.logits = nn.Sequential(
             # First Layer
             nn.Conv2d(1, 32, kernel_size=5, padding=2),
             nn.MaxPool2d(kernel_size=2),
-            nn.ReLU(),
 
             # Second Layer
             nn.Conv2d(32, 64, kernel_size=5, padding=2),
             nn.MaxPool2d(kernel_size=2),
-            nn.ReLU(),
 
             nn.Flatten(),
             nn.Linear(64 * 7 * 7, 1024),
             nn.Linear(1024, 10))
+
+        # C - With Optimization
+        # self.logits = nn.Sequential(
+        #     # First Layer
+        #     nn.Conv2d(1, 32, kernel_size=5, padding=2),
+        #     nn.MaxPool2d(kernel_size=2),
+        #     nn.ReLU(),
+        #
+        #     # Second Layer
+        #     nn.Conv2d(32, 64, kernel_size=5, padding=2),
+        #     nn.MaxPool2d(kernel_size=2),
+        #     nn.ReLU(),
+        #
+        #     nn.Flatten(),
+        #     nn.Linear(64 * 7 * 7, 1024),
+        #     nn.Linear(1024, 10))
 
     # Predictor
     def f(self, x):
