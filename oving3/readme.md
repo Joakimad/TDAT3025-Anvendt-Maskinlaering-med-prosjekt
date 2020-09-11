@@ -15,10 +15,16 @@ denne modellen?
 Utvid modellen som vist nedenfor. Ca hvordan accuracy oppnår
 denne modellen?
 
+*Modellen oppnår nå en max accuracy på 98.47%.*
+
 ## c 
 Prøv selv og utvid modellen du laget i b). Hvordan accuracy klarer
 du å oppnå?
 
+*Modellen oppnår nå en max accuracy på 98.53%.*
+
 ## d
 I stedet for MNIST datasettet, bruk Fashion MNIST. Lag en
 passende modell. Hvordan accuracy klarer du å oppnå?
+
+*Modellen oppnår nå en max accuracy på 91.57%.*

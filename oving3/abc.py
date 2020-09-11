@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torchvision
 
-# variables
+# Variables
 epochs = 20
 learning_rate = 0.001
 
@@ -42,27 +42,48 @@ class ConvolutionalNeuralNetworkModel(nn.Module):
         #      nn.Flatten(),
         #      nn.Linear(32 * 14 * 14, 10))
 
-        # a
-        # Adding 2nd convulation layer
+        # A - With Second Layer
+        # self.logits = nn.Sequential(
+        #     # First Layer
+        #     nn.Conv2d(1, 32, kernel_size=5, padding=2),
+        #     nn.MaxPool2d(kernel_size=2),
+        #
+        #     # Second Layer
+        #     nn.Conv2d(32, 64, kernel_size=5, padding=2),
+        #     nn.MaxPool2d(kernel_size=2),
+        #
+        #     nn.Flatten(),
+        #     nn.Linear(64 * 7 * 7, 10))
+
+        # B - With Extra Linear Layer
+        # self.logits = nn.Sequential(
+        #     # First Layer
+        #     nn.Conv2d(1, 32, kernel_size=5, padding=2),
+        #     nn.MaxPool2d(kernel_size=2),
+        #
+        #     # Second Layer
+        #     nn.Conv2d(32, 64, kernel_size=5, padding=2),
+        #     nn.MaxPool2d(kernel_size=2),
+        #
+        #     nn.Flatten(),
+        #     nn.Linear(64 * 7 * 7, 1024),
+        #     nn.Linear(1024, 10))
+
+        # C - With Optimization
         self.logits = nn.Sequential(
+            # First Layer
             nn.Conv2d(1, 32, kernel_size=5, padding=2),
             nn.MaxPool2d(kernel_size=2),
+            nn.ReLU(),
+
+            # Second Layer
             nn.Conv2d(32, 64, kernel_size=5, padding=2),
             nn.MaxPool2d(kernel_size=2),
+            nn.ReLU(),
+
             nn.Flatten(),
-            nn.Linear(32 * 14 * 14, 10))
-
-        # b
-        # self.logits = nn.Sequential(nn.Conv2d(1, 32, kernel_size=5, padding=2),
-        #                            nn.MaxPool2d(kernel_size=2),
-        #                            nn.Flatten(),
-        #                            nn.Linear(32 * 14 * 14, 10))
-
-        # c
-        # self.logits = nn.Sequential(nn.Conv2d(1, 32, kernel_size=5, padding=2),
-        #                            nn.MaxPool2d(kernel_size=2),
-        #                            nn.Flatten(),
-        #                            nn.Linear(32 * 14 * 14, 10))
+            nn.Linear(64 * 7 * 7, 1024),
+            nn.Linear(1024, 10))
 
     # Predictor
     def f(self, x):
@@ -81,10 +102,16 @@ model = ConvolutionalNeuralNetworkModel()
 
 # Optimize: adjust W and b to minimize loss using stochastic gradient descent
 optimizer = torch.optim.Adam(model.parameters(), learning_rate)
+maxAcc = 0
 for epoch in range(epochs):
     for batch in range(len(x_train_batches)):
         model.loss(x_train_batches[batch], y_train_batches[batch]).backward()  # Compute loss gradients
         optimizer.step()  # Perform optimization by adjusting W and b,
         optimizer.zero_grad()  # Clear gradients for next step
 
-    print("%s: accuracy = %s" % (batch, model.accuracy(x_test, y_test)))
+    val = model.accuracy(x_test, y_test).item()
+    if val > maxAcc:
+        maxAcc = val
+
+    print("%s: accuracy = %s" % (epoch, model.accuracy(x_test, y_test)))
+print("Max Accuracy: %s" % maxAcc)
