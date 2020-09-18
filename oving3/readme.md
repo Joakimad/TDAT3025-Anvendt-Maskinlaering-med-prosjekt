@@ -27,4 +27,4 @@ du å oppnå?
 I stedet for MNIST datasettet, bruk Fashion MNIST. Lag en
 passende modell. Hvordan accuracy klarer du å oppnå?
 
-*Modellen oppnår nå en max accuracy på 91.57%.*
+*Modellen oppnår nå en max accuracy på 91.62%.*

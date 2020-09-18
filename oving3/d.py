@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torchvision
 
-# d) With the following model consisting of two conv2d layers with relu activations,
-# and pooling layers between, as well as a second linear layer before the final classification,
-# we achieve a max accuracy of 91.640% within 19 epochs
+# Variables
+epochs = 20
+learning_rate = 0.001
 
 train_data = torchvision.datasets.FashionMNIST('./data', train=True, download=True)
 x_train = train_data.data.reshape(-1, 1, 28, 28).float()
@@ -16,11 +16,13 @@ x_test = test_data.data.reshape(-1, 1, 28, 28).float()
 y_test = torch.zeros((test_data.targets.shape[0], 10))
 y_test[torch.arange(test_data.targets.shape[0]), test_data.targets] = 1
 
+# Normalize
 mean = x_train.mean()
 std = x_train.std()
 x_train = (x_train - mean) / std
 x_test = (x_test - mean) / std
 
+# Batches
 batches = 600
 x_train_batches = torch.split(x_train, batches)
 y_train_batches = torch.split(y_train, batches)
@@ -58,9 +60,8 @@ class ConvolutionalModel(nn.Module):
 
 model = ConvolutionalModel()
 
-optimizer = torch.optim.Adam(model.parameters(), 0.001)
-
-for epoch in range(20):
+optimizer = torch.optim.Adam(model.parameters(), learning_rate)
+for epoch in range(epochs):
     for batch in range(len(x_train_batches)):
         model.loss(x_train_batches[batch], y_train_batches[batch]).backward()
         optimizer.step()
