@@ -1,7 +1,10 @@
-from sklearn.preprocessing import KBinsDiscretizer
-import numpy as np
 from typing import Tuple
-import gym, time, math
+
+import gym
+import math
+import numpy as np
+import time
+from sklearn.preprocessing import KBinsDiscretizer
 
 # VARIABLES
 
