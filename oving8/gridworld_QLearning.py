@@ -67,7 +67,7 @@ for episode in range(training_episodes):
         # Update state
         current_state = new_state
         # env.render(q_table)
-    print("Turns taken: %dt" % env.steps_taken)
+    #print("Steps taken: %dt" % env.steps_taken)
 
 print("Training Complete!")
 input("Ready to start...\n")
@@ -83,10 +83,9 @@ for episode in range(run_episodes):
 
         # Increment environment
         properties, reward, done, info = env.step(action)
-        print(info)
         new_state = properties
         current_state = new_state
 
         # Render the cartpole environment
         env.render(q_table)
-    print("Turns taken: %dt" % env.steps_taken)
+    print("Steps taken: %dt" % env.steps_taken)
