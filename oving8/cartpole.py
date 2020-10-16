@@ -7,15 +7,16 @@ import time
 from sklearn.preprocessing import KBinsDiscretizer
 
 # VARIABLES
-
-min_learning_rate = 0.1
-min_exploration_rate = 0.1
-training_episodes = 500
+training_episodes = 1000
 run_episodes = 3
-discount = 1
+
 learning_rate = 0
 exploration_rate = 0
-decay = 25
+min_learning_rate = 0.1
+min_exploration_rate = 0.1
+
+discount = 1
+decay = 20
 
 
 # FUNCTIONS
@@ -32,14 +33,19 @@ def discretizer(_, __, angle, pole_velocity) -> Tuple[int, ...]:
 # Chooses if a known action or a random action will be taken.
 def select_action(state_value, er):
     if np.random.random() < er:
+        print("Random Action")
         return env.action_space.sample()
     else:
+        print("Educated Action")
         return np.argmax(Q_table[state_value])
 
 
 # Decays the learning rate so that the model learns more at the beginning.
 def decay_rate(n, min_value):
     return max(min_value, min(1.0, 1.0 - math.log10((n + 1) / decay)))
+
+
+
 
 
 # EXECUTABLE
@@ -56,22 +62,28 @@ upper_bounds = [env.observation_space.high[2], math.radians(50)]
 
 # Initial Q-table
 Q_table = np.zeros(bins + (env.action_space.n,))
+print(Q_table.shape)
+
 
 # Training
+print("Training Started...")
 for episode in range(training_episodes):
     current_state = discretizer(*env.reset())
+
+    # Decay. Uses episode number as variable.
+    learning_rate = decay_rate(episode, min_learning_rate)
+    exploration_rate = decay_rate(episode, min_exploration_rate)
+
     done = False
     while not done:
-        # Decay. Uses episode number as variable.
-        learning_rate = decay_rate(episode, min_learning_rate)
-        exploration_rate = decay_rate(episode, min_exploration_rate)
-
         # Decide known action or random action.
         action = select_action(current_state, exploration_rate)
 
         # Increment environment
         properties, reward, done, _ = env.step(action)
+        print(properties, reward, done)
         new_state = discretizer(*properties)
+        print(new_state)
 
         # Update Q-Table
         future_optimal_value = np.max(Q_table[new_state])
@@ -83,8 +95,8 @@ for episode in range(training_episodes):
 
         # env.render()
 
-print("Training Complete")
-input("Ready to start...")
+print("Training Complete!")
+input("Ready to start...\n")
 
 # Run
 for episode in range(run_episodes):
